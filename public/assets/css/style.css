@@ -5967,7 +5967,10 @@ Pages - My Account
   max-width: 100%;
   -webkit-transition: all 0.3s ease 0s;
   transition: all 0.3s ease 0s;
-  width: 100%;
+  width: 270px; 
+    height: 310px; 
+    object-fit: cover; 
+    border-radius: 5px;
 }
 .product .thumb .image img.hover-image {
   position: absolute;

@@ -1,13 +1,77 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
+const multer = require("multer");
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const Product = require("./models/Product");
 
-// Set the view engine to EJS
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static('public')); // For serving uploaded images
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
 
-// Serve static files (CSS, JS, Images)
-app.use(express.static('public'));
+
+// MongoDB Atlas Connection
+mongoose.connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log('MongoDB Connected'))
+  .catch(err => console.error(err));
+
+// Multer Configuration for File Upload
+const storage = multer.diskStorage({
+    destination: './public/uploads/',
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage });
+
+// Home Page Route (Fetch Products)
+app.get('/', async (req, res) => {
+    try {
+        const products = await Product.find(); // Fetch all products
+        res.render('index', { products });
+    } catch (err) {
+        res.status(500).send('Error fetching products');
+    }
+});
+
+// Add Product Route (Render Add Form)
+app.get('/add-product', async (req, res) => {
+    res.render('add');
+});
+
+// Submit Product Form (Save to MongoDB)
+app.post('/add-product', upload.single('image'), async (req, res) => {
+    try {
+        const { product_name, category, description, material, other_info, rate, weight } = req.body;
+        const image = req.file ? `/uploads/${req.file.filename}` : '';
+
+        const newProduct = new Product({
+            product_name,
+            category,
+            description,
+            material,
+            other_info,
+            image,
+            rate,  // Added rate field
+            weight // Added weight field
+        });
+
+        await newProduct.save();
+        res.redirect('/'); // Redirect to home page to show updated products
+    } catch (err) {
+        res.status(500).send('Error saving product');
+    }
+});
+
 
 // Routes
 app.get('/', (req, res) => {
@@ -102,5 +166,5 @@ app.get('/wishlist', (req, res) => {
     res.render('wishlist');
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+const PORT = process.env.PORT;
+app.listen(PORT, () => console.log('Server running on port 3000'));
