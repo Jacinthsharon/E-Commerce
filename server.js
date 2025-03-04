@@ -34,12 +34,14 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Home Page Route (Fetch Products)
-app.get('/', async (req, res) => {
+app.get("/", async (req, res) => {
     try {
-        const products = await Product.find(); // Fetch all products
-        res.render('index', { products });
+        const category = req.query.category || "Office Essentials"; // Default to "Office Essentials"
+        const products = await Product.find({ category }); // Fetch products for selected category
+        res.render("index", { products, selectedCategory: category });
     } catch (err) {
-        res.status(500).send('Error fetching products');
+        console.error("Error fetching products:", err);
+        res.status(500).send("Internal Server Error");
     }
 });
 

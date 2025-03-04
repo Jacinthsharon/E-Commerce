@@ -131,21 +131,13 @@
                         <!-- Tab Start -->
                         <div class="nav-center">
                             <ul class="product-tab-nav nav align-items-center justify-content-center">
-                                <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab"
-                                        href="#tab-product--Office Essentials">Office Essentials</a></li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                        href="#tab-product--Drinkware">Drinkware</a>
-                                </li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                        href="#tab-product-Accessories">Accessories</a></li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                        href="#tab-product-Awards">Awards</a></li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                        href="#tab-product-Eco-Friendly Gifts">Eco-Friendly Gifts</a></li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                        href="#tab-product-company gifts">company gifts</a></li>
-                                <li class="nav-item"><a class="nav-link" data-bs-toggle="tab"
-                                        href="#tab-product-Wearables">Wearables</a></li>    
+                                <li class="nav-item"><a class="nav-link <%= selectedCategory === 'Office Essentials' ? 'active' : '' %>" href="/">Office Essentials</a></li>
+                                <li class="nav-item"><a class="nav-link <%= selectedCategory === 'Drinkware' ? 'active' : '' %>" href="/?category=Drinkware">Drinkware</a></li>
+                                <li class="nav-item"><a class="nav-link <%= selectedCategory === 'Accessories' ? 'active' : '' %>" href="/?category=Accessories">Accessories</a></li>
+                                <li class="nav-item"><a class="nav-link <%= selectedCategory === 'Awards' ? 'active' : '' %>" href="/?category=Awards">Awards</a></li>
+                                <li class="nav-item"><a class="nav-link <%= selectedCategory === 'Eco-Friendly Gifts' ? 'active' : '' %>" href="/?category=Eco-Friendly Gifts">Eco-Friendly Gifts</a></li>
+                                <li class="nav-item"><a class="nav-link <%= selectedCategory === 'Company Gifts' ? 'active' : '' %>" href="/?category=Company Gifts">Company Gifts</a></li>
+                                <li class="nav-item"><a class="nav-link <%= selectedCategory === 'Wearables' ? 'active' : '' %>" href="/?category=Wearables">Wearables</a></li>
                             </ul>
                         </div>
                         <!-- Tab End -->
@@ -154,84 +146,73 @@
                 <!-- Section Title End -->
             </div>
             <!-- Section Title & Tab End -->
-
+    
+            <!-- Product Display -->
             <div class="row">
-                <div class="col">
-                    <div class="tab-content mb-30px0px">
-                        <div class="tab-pane fade show active" id="tab-product--Office Essentials">
+                <% if (products.length > 0) { %>
+                    <% products.forEach((product, index) => { %>
+                        <% if (index % 4 === 0) { %> <!-- Start new row every 4 products -->
                             <div class="row">
-                                <% products.forEach((product, index) => { %>
-                                    <% if (index % 4 === 0) { %> <!-- Start new row every 4 products -->
-                                        <div class="row">
-                                    <% } %>
-            
-                                    <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px" data-aos="fade-up"
-                                        data-aos-delay="<%= 200 + (index % 4) * 200 %>">
-                                        <div class="product">
-                                            <div class="thumb">
-                                                <a href="/single-product" class="image">
-                                                    <img src="<%= product.image %>" alt="<%= product.product_name %>" style="width: 270px; height: 310px; object-fit: cover;"/>
-                                                    <img class="hover-image" src="<%= product.image %>" alt="Product" style="width: 270px; height: 310px; object-fit: cover;"/>
-                                                </a>
-                                                <span class="badges">
-                                                    <span class="new">New</span>
-                                                </span>
-                                                <div class="actions">
-                                                    <a href="/wishlist" class="action wishlist" title="Wishlist">
-                                                        <i class="pe-7s-like"></i>
-                                                    </a>
-                                                    <a href="#" class="action quickview" data-link-action="quickview"
-                                                        title="Quick view" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModal">
-                                                        <i class="pe-7s-search"></i>
-                                                    </a>
-                                                    <a href="/compare" class="action compare" title="Compare">
-                                                        <i class="pe-7s-refresh-2"></i>
-                                                    </a>
-                                                </div>
-                                                <button title="Add To Cart" class="add-to-cart">Add To Cart</button>
-                                            </div>
-                                            <div class="content">
-                                                <span class="ratings">
-                                                    <span class="rating-wrap">
-                                                        <span class="star" style="width: 100%"></span>
-                                                    </span>
-                                                    <span class="rating-num">( 5 Review )</span>
-                                                </span>
-                                                <h5 class="title">
-                                                    <a href="/single-product"><%= product.product_name %></a>
-                                                </h5>
-                                                <span class="price">
-                                                    <span class="new">$<%= product.rate %></span> <!-- Display rate -->
-                                                </span>
-                                                <div class="product-info">
-                                                    <span class="weight">Weight: <%= product.weight %>g</span> <!-- Display weight -->
-                                                </div>
-                                            </div>
-                                        </div>
+                        <% } %>
+                        
+                        <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px" data-aos="fade-up"
+                            data-aos-delay="<%= 200 + (index % 4) * 200 %>">
+                            <div class="product">
+                                <div class="thumb">
+                                    <a href="/single-product" class="image">
+                                        <img src="<%= product.image %>" alt="<%= product.product_name %>" 
+                                             style="width: 270px; height: 310px; object-fit: cover;"/>
+                                        <img class="hover-image" src="<%= product.image %>" alt="Product" 
+                                             style="width: 270px; height: 310px; object-fit: cover;"/>
+                                    </a>
+                                    <span class="badges">
+                                        <span class="new">New</span>
+                                    </span>
+                                    <div class="actions">
+                                        <a href="/wishlist" class="action wishlist" title="Wishlist">
+                                            <i class="pe-7s-like"></i>
+                                        </a>
+                                        <a href="#" class="action quickview" data-link-action="quickview"
+                                            title="Quick view" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                            <i class="pe-7s-search"></i>
+                                        </a>
+                                        <a href="/compare" class="action compare" title="Compare">
+                                            <i class="pe-7s-refresh-2"></i>
+                                        </a>
                                     </div>
-            
-                                    <% if ((index + 1) % 4 === 0 || index === products.length - 1) { %> <!-- Close row every 4 products -->
-                                        </div>
-                                    <% } %>
-                                <% }); %>
+                                    <button title="Add To Cart" class="add-to-cart">Add To Cart</button>
+                                </div>
+                                <div class="content">
+                                    <span class="ratings">
+                                        <span class="rating-wrap">
+                                            <span class="star" style="width: 100%"></span>
+                                        </span>
+                                        <span class="rating-num">( 5 Review )</span>
+                                    </span>
+                                    <h5 class="title">
+                                        <a href="/single-product"><%= product.product_name %></a>
+                                    </h5>
+                                    <span class="price">
+                                        <span class="new">$<%= product.rate %></span>
+                                    </span>
+                                    <div class="product-info">
+                                        <span class="weight">Weight: <%= product.weight %>g</span>
+                                    </div>
+                                </div>
                             </div>
-            
-                            <!-- Load More Button -->
-                            <div class="text-center mt-4">
-                                <a href="/shop-4-column" class="btn btn-lg btn-primary btn-hover-dark m-auto"> 
-                                    Load More <i class="fa fa-arrow-right ml-15px" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                            <!-- End Load More Button -->
-            
                         </div>
-                    </div>
-                </div>
+            
+                        <% if ((index + 1) % 4 === 0 || index === products.length - 1) { %>
+                            </div> <!-- Close row -->
+                        <% } %>
+                    <% }); %>
+                <% } else { %>
+                    <p class="text-center">No products available in this category.</p>
+                <% } %>
             </div>
         </div>
     </div>
-    <!-- Product Area End -->
+            <!-- Product Area End -->
 
     <!-- Banner Area Start -->
     <div class="banner-area pt-100px pb-100px plr-15px">
