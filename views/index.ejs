@@ -154,16 +154,14 @@
                         <% if (index % 4 === 0) { %> <!-- Start new row every 4 products -->
                             <div class="row">
                         <% } %>
-                        
+    
                         <div class="col-lg-4 col-xl-3 col-md-6 col-sm-6 col-xs-6 mb-30px" data-aos="fade-up"
                             data-aos-delay="<%= 200 + (index % 4) * 200 %>">
                             <div class="product">
                                 <div class="thumb">
-                                    <a href="/single-product" class="image">
-                                        <img src="<%= product.image %>" alt="<%= product.product_name %>" 
-                                             style="width: 270px; height: 310px; object-fit: cover;"/>
-                                        <img class="hover-image" src="<%= product.image %>" alt="Product" 
-                                             style="width: 270px; height: 310px; object-fit: cover;"/>
+                                    <a href="/product/<%= product._id %>" class="image">
+                                        <img src="<%= product.image %>" alt="<%= product.product_name %>" style="width: 270px; height: 310px; object-fit: cover;"/>
+                                        <img class="hover-image" src="<%= product.image %>" alt="Product" style="width: 270px; height: 310px; object-fit: cover;"/>
                                     </a>
                                     <span class="badges">
                                         <span class="new">New</span>
@@ -192,16 +190,16 @@
                                     <h5 class="title">
                                         <a href="/single-product"><%= product.product_name %></a>
                                     </h5>
+                                    <p class="short-description">
+                                        <%= product.short_description %>
+                                    </p>
                                     <span class="price">
                                         <span class="new">$<%= product.rate %></span>
                                     </span>
-                                    <div class="product-info">
-                                        <span class="weight">Weight: <%= product.weight %>g</span>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-            
+    
                         <% if ((index + 1) % 4 === 0 || index === products.length - 1) { %>
                             </div> <!-- Close row -->
                         <% } %>
@@ -212,7 +210,7 @@
             </div>
         </div>
     </div>
-            <!-- Product Area End -->
+                <!-- Product Area End -->
 
     <!-- Banner Area Start -->
     <div class="banner-area pt-100px pb-100px plr-15px">

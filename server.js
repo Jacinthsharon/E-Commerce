@@ -17,10 +17,8 @@ app.set('view engine', 'ejs');
 
 
 // MongoDB Atlas Connection
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log('MongoDB Connected'))
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('MongoDB Connected'))
   .catch(err => console.error(err));
 
 // Multer Configuration for File Upload
@@ -50,10 +48,60 @@ app.get('/add-product', async (req, res) => {
     res.render('add');
 });
 
+app.get("/product/:id", async (req, res) => {
+    try {
+        const product = await Product.findById(req.params.id); // Fetch product by ID
+        if (!product) {
+            return res.status(404).send("Product not found");
+        }
+        res.render("single-product-affiliate", { product });
+    } catch (err) {
+        console.error("Error fetching product:", err);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get('/shop-4-column', async (req, res) => {
+    try {
+        const category = req.query.category || ""; // Get category from query params
+        let query = {};
+
+        if (category) {
+            query.category = category; // Filter by category if selected
+        }
+
+        const products = await Product.find(query); // Fetch filtered or all products
+        res.render('shop-4-column', { products, selectedCategory: category });
+    } catch (err) {
+        console.error("Error fetching products:", err);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get('/mug', async (req, res) => {
+    try {
+        const mugs = await Product.find({ product_name: /mug/i }); // Fetch all products with "Mug" in the name
+        res.render('mug', { products: mugs }); // Render the mug.ejs page with mug products
+    } catch (err) {
+        console.error("Error fetching mugs:", err);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+app.get('/flask', async (req, res) => {
+    try {
+        const flasks = await Product.find({ product_name: /flask/i }); // Case-insensitive search for "Flask"
+        res.render('flask', { products: flasks });
+    } catch (err) {
+        console.error("Error fetching flasks:", err);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
 // Submit Product Form (Save to MongoDB)
 app.post('/add-product', upload.single('image'), async (req, res) => {
     try {
-        const { product_name, category, description, material, other_info, rate, weight } = req.body;
+        const { product_name, category, description, material, other_info, rate, weight, short_description, dimension } = req.body;
         const image = req.file ? `/uploads/${req.file.filename}` : '';
 
         const newProduct = new Product({
@@ -63,12 +111,22 @@ app.post('/add-product', upload.single('image'), async (req, res) => {
             material,
             other_info,
             image,
-            rate,  // Added rate field
-            weight // Added weight field
+            rate,
+            weight,
+            short_description, // New field added
+            dimension // New field added
         });
 
         await newProduct.save();
-        res.redirect('/'); // Redirect to home page to show updated products
+        if (product_name.toLowerCase().includes('mug')) {
+            res.redirect(`/mug`); 
+        }
+        if (product_name.toLowerCase().includes('flask')) {
+            return res.redirect('/flask'); 
+        } 
+         else {
+            res.redirect('/'); 
+        }
     } catch (err) {
         res.status(500).send('Error saving product');
     }
