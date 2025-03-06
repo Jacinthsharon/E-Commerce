@@ -7,7 +7,9 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const fs = require('fs')
+const session = require('express-session');
 const Product = require("./models/Product");
+const Wishlist = require("./models/Wishlist");
 
 // Middleware
 app.use(cors());
@@ -15,6 +17,14 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public')); // For serving uploaded images
 app.set('view engine', 'ejs');
+
+app.use(session({
+    secret: 'ecommerce',  // Change this to a strong secret
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set to true if using HTTPS
+}));
+
 
 const blogsFilePath = path.join(__dirname, 'blogs.json');
 
@@ -63,6 +73,61 @@ app.get("/product/:id", async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+app.post("/add-to-wishlist", async (req, res) => {
+    try {
+        const { product_id } = req.body;
+
+        if (!req.session.wishlist) {
+            req.session.wishlist = []; // Initialize wishlist if empty
+        }
+
+        // Check if product is already in wishlist
+        if (!req.session.wishlist.includes(product_id)) {
+            req.session.wishlist.push(product_id);
+        }
+
+        res.json({ success: true, message: "Added to wishlist!" });
+    } catch (err) {
+        console.error("Error adding to wishlist:", err);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
+app.get("/wishlist", async (req, res) => {
+    try {
+        if (!req.session.wishlist || req.session.wishlist.length === 0) {
+            return res.render("wishlist", { products: [] });
+        }
+
+        // Fetch products that are in the session wishlist
+        const wishlistProducts = await Product.find({ _id: { $in: req.session.wishlist } });
+
+        res.render("wishlist", { products: wishlistProducts });
+    } catch (err) {
+        console.error("Error fetching wishlist:", err);
+        res.status(500).send("Server error");
+    }
+});
+
+app.post("/remove-from-wishlist", async (req, res) => {
+    try {
+        const { product_id } = req.body;
+
+        if (!req.session.wishlist) {
+            return res.json({ success: false, message: "Wishlist is empty" });
+        }
+
+        // Remove product from session wishlist
+        req.session.wishlist = req.session.wishlist.filter(id => id !== product_id);
+
+        res.json({ success: true, message: "Removed from wishlist!" });
+    } catch (err) {
+        console.error("Error removing from wishlist:", err);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
 
 app.get('/shop-4-column', async (req, res) => {
     try {

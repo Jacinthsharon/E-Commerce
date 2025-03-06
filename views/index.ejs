@@ -164,10 +164,10 @@
                                         <img class="hover-image" src="<%= product.image %>" alt="Product" style="width: 270px; height: 310px; object-fit: cover;"/>
                                     </a>
                                     <span class="badges">
-                                        <span class="new">New</span>
+                                        <span class="new"><%= product.category %></span>
                                     </span>
                                     <div class="actions">
-                                        <a href="/wishlist" class="action wishlist" title="Wishlist">
+                                        <a href="#" class="action wishlist-btn" data-product-id="<%= product._id %>" title="Add to Wishlist">
                                             <i class="pe-7s-like"></i>
                                         </a>
                                         <a href="#" class="action quickview" data-link-action="quickview"
@@ -194,7 +194,7 @@
                                         <%= product.short_description %>
                                     </p>
                                     <span class="price">
-                                        <span class="new">$<%= product.rate %></span>
+                                        <span class="new">₹  <%= product.rate %></span>
                                     </span>
                                 </div>
                             </div>

@@ -463,3 +463,56 @@
 
 
 })(jQuery);
+
+document.addEventListener("DOMContentLoaded", () => {
+    const wishlistButtons = document.querySelectorAll(".wishlist-btn");
+
+    wishlistButtons.forEach(button => {
+        button.addEventListener("click", async (event) => {
+            event.preventDefault();
+
+            const productId = button.getAttribute("data-product-id");
+
+            try {
+                await fetch("/add-to-wishlist", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                });
+
+                button.classList.add("added"); // Example: Change button style
+            } catch (error) {
+                console.error("Error adding to wishlist:", error);
+            }
+        });
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const removeButtons = document.querySelectorAll(".remove-from-wishlist");
+
+    removeButtons.forEach(button => {
+        button.addEventListener("click", async (event) => {
+            event.preventDefault();
+
+            const productId = button.getAttribute("data-id");
+
+            try {
+                await fetch("/remove-from-wishlist", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                });
+
+                // ✅ Remove the product row from the table without reloading
+                button.closest("tr").remove();
+            } catch (error) {
+                console.error("Error removing from wishlist:", error);
+            }
+        });
+    });
+});

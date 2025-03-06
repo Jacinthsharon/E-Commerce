@@ -38,7 +38,7 @@
                                                     <img class="hover-image" src="<%= product.image %>" alt="<%= product.product_name %>" style="width: 270px; height: 310px; object-fit: cover;">
                                                 </a>
                                                 <span class="badges">
-                                                    <span class="new">New</span>
+                                                    <span class="new"><%= product.category %></span>
                                                 </span>
                                                 <div class="actions">
                                                     <a href="/wishlist" class="action wishlist" title="Wishlist"><i class="pe-7s-like"></i></a>
@@ -52,7 +52,7 @@
                                             <div class="content">
                                                 <h5 class="title"><a href="/product/<%= product._id %>"><%= product.product_name %></a></h5>
                                                 <p class="short-description"><%= product.short_description %></p>
-                                                <span class="price"><span class="new">$<%= product.rate %></span></span>
+                                                <span class="price"><span class="new">₹  <%= product.rate %></span></span>
                                             </div>
                                         </div>
                                     </div>
