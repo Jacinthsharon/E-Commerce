@@ -6,6 +6,7 @@ const multer = require("multer");
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const fs = require('fs')
 const Product = require("./models/Product");
 
 // Middleware
@@ -14,6 +15,8 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public')); // For serving uploaded images
 app.set('view engine', 'ejs');
+
+const blogsFilePath = path.join(__dirname, 'blogs.json');
 
 
 // MongoDB Atlas Connection
@@ -416,6 +419,36 @@ app.get('/key-holders', async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 });
+
+function getBlogs() {
+    try {
+        const data = fs.readFileSync(blogsFilePath, 'utf8');
+        return JSON.parse(data);
+    } catch (error) {
+        console.error("Error reading blogs.json:", error);
+        return [];
+    }
+}
+
+// Route to fetch all blogs
+app.get('/blogs', (req, res) => {
+    const blogs = getBlogs();
+    res.json(blogs);
+});
+
+// Route to fetch a single blog by ID
+app.get('/blog-single', (req, res) => {
+    const blogs = getBlogs();
+    const blogId = parseInt(req.query.id);
+    const blog = blogs.find(b => b.id === blogId);
+
+    if (!blog) {
+        return res.status(404).send("Blog not found");
+    }
+
+    res.render('blog-single', { blog });
+});
+
 
 // Submit Product Form (Save to MongoDB)
 app.post('/add-product', upload.single('image'), async (req, res) => {
