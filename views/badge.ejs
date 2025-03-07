@@ -41,11 +41,9 @@
                                                     <span class="new"><%= product.category %></span>
                                                 </span>
                                                 <div class="actions">
-                                                    <a href="/wishlist" class="action wishlist" title="Wishlist"><i class="pe-7s-like"></i></a>
-                                                    <a href="#" class="action quickview" data-bs-toggle="modal" data-bs-target="#exampleModal" title="Quick view">
-                                                        <i class="pe-7s-search"></i>
+                                                    <a href="#" class="action wishlist-btn" data-product-id="<%= product._id %>" title="Add to Wishlist">
+                                                        <i class="pe-7s-like"></i>
                                                     </a>
-                                                    <a href="/compare" class="action compare" title="Compare"><i class="pe-7s-refresh-2"></i></a>
                                                 </div>
                                                 <button title="Add To Cart" class="add-to-cart">Add To Cart</button>
                                             </div>

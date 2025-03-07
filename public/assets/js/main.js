@@ -491,9 +491,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".remove-wishlist-item").forEach(button => {
-        button.addEventListener("click", function(e) {
+        button.addEventListener("click", function (e) {
             e.preventDefault();
             const productId = this.getAttribute("data-id");
 
@@ -505,7 +505,12 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    this.closest("tr").remove(); // Remove the product row from the table
+                    this.closest("tr").remove(); // Remove product from UI
+
+                    // Optionally, refresh wishlist from server to prevent further issues
+                    location.reload(); // Ensures proper state update
+                } else {
+                    alert("Error removing product. Try again.");
                 }
             })
             .catch(error => console.error("Error:", error));
