@@ -465,54 +465,50 @@
 })(jQuery);
 
 document.addEventListener("DOMContentLoaded", () => {
-    const wishlistButtons = document.querySelectorAll(".wishlist-btn");
-
-    wishlistButtons.forEach(button => {
-        button.addEventListener("click", async (event) => {
+    document.querySelectorAll(".wishlist-btn").forEach((button) => {
+        button.addEventListener("click", async function (event) {
             event.preventDefault();
 
-            const productId = button.getAttribute("data-product-id");
+            const productId = this.getAttribute("data-product-id");
 
             try {
-                await fetch("/add-to-wishlist", {
+                const response = await fetch("/wishlist/add", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ product_id: productId })
                 });
 
-                button.classList.add("added"); // Example: Change button style
+                const data = await response.json();
+                if (data.success) {
+                    this.classList.add("added");
+                    console.log("Wishlist updated:", data.wishlist);
+                }
             } catch (error) {
-                console.error("Error adding to wishlist:", error);
+                console.error("Error updating wishlist:", error);
             }
         });
     });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
-    const removeButtons = document.querySelectorAll(".remove-from-wishlist");
 
-    removeButtons.forEach(button => {
-        button.addEventListener("click", async (event) => {
-            event.preventDefault();
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll(".remove-wishlist-item").forEach(button => {
+        button.addEventListener("click", function(e) {
+            e.preventDefault();
+            const productId = this.getAttribute("data-id");
 
-            const productId = button.getAttribute("data-id");
-
-            try {
-                await fetch("/remove-from-wishlist", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ product_id: productId })
-                });
-
-                // ✅ Remove the product row from the table without reloading
-                button.closest("tr").remove();
-            } catch (error) {
-                console.error("Error removing from wishlist:", error);
-            }
+            fetch("/wishlist/remove", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ product_id: productId })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.closest("tr").remove(); // Remove the product row from the table
+                }
+            })
+            .catch(error => console.error("Error:", error));
         });
     });
 });

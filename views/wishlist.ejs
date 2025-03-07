@@ -23,50 +23,62 @@
         <div class="container">
             <h3 class="cart-page-title">Your Wishlist Items</h3>
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="table-content wishlist-table">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th class="product-thumbnail">Image</th>
-                                    <th class="product-name">Product</th>
-                                    <th class="product-price">Price</th>
-                                    <th class="product-wishlist-cart">Add to Cart</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% if (products.length > 0) { %>
-                                    <% products.forEach(product => { %>
-                                        <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="/product/<%= product._id %>">
-                                                    <img class="img-responsive ml-15px" src="<%= product.image %>" alt="" />
-                                                </a>
-                                            </td>
-                                            <td class="product-name">
-                                                <a href="/product/<%= product._id %>"><%= product.product_name %></a>
-                                            </td>
-                                            <td class="product-price">
-                                                <span class="amount">₹ <%= product.rate %></span>
-                                            </td>
-                                            <td class="product-wishlist-cart">
-                                                <a href="/add-to-cart/<%= product._id %>" class="btn btn-primary">Add to Cart</a>
-                                            </td>
-                                        </tr>
-                                    <% }); %>
-                                <% } else { %>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <form action="#">
+                        <div class="table-content table-responsive cart-table-content">
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td colspan="4" class="text-center">Your wishlist is empty.</td>
+                                        <th class="product-thumbnail">Image</th>
+                                        <th class="product-name">Product</th>
+                                        <th class="product-price-cart">Price</th>
+                                        <th>Qty</th>
+                                        <th class="product-wishlist-cart">Add to Cart</th>
+                                        <th class="product-wishlist-remove">Remove</th>
                                     </tr>
-                                <% } %>
-                            </tbody>
-                        </table>
-                    </div>
+                                </thead>
+                                <tbody>
+                                    <% if (products.length > 0) { %>
+                                        <% products.forEach(product => { %>
+                                            <tr>
+                                                <td class="product-thumbnail">
+                                                    <a href="/product/<%= product._id %>">
+                                                        <img class="img-responsive ml-15px" src="<%= product.image %>" alt="<%= product.product_name %>" />
+                                                    </a>
+                                                </td>
+                                                <td class="product-name">
+                                                    <a href="/product/<%= product._id %>"><%= product.product_name %></a>
+                                                </td>
+                                                <td class="product-price-cart">
+                                                    <span class="amount">₹ <%= product.rate %></span>
+                                                </td>
+                                                <td class="product-quantity">
+                                                    <div class="cart-plus-minus">
+                                                        <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
+                                                    </div>
+                                                </td>
+                                                <td class="product-wishlist-cart">
+                                                    <a href="/add-to-cart/<%= product._id %>" class="product-wishlist-cart">Add to Cart</a>
+                                                </td>
+                                                <td class="product-wishlist-remove">
+                                                    <button class="remove-wishlist-item" data-id="<%= product._id %>">Remove</button>
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="6" class="text-center">Your wishlist is empty.</td>
+                                        </tr>
+                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-
+    
     <%- include('partials/footer') %>
 
 </body>

@@ -8410,3 +8410,20 @@ input[type="file"] {
   max-height: 100%;
   display: block;
 }
+
+.remove-wishlist-item{
+  background-color: rgb(215, 0, 0); 
+  color: white; 
+  padding: 7px; 
+  font-weight: bold;
+}
+
+.remove-wishlist-item:hover{
+  background-color: rgb(180, 0, 0);
+}
+
+.product-thumbnail img {
+  width: 141px;
+  height: 141px;
+  object-fit: cover; /* Ensures the image fills the dimensions without distortion */
+}

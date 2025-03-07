@@ -74,61 +74,6 @@ app.get("/product/:id", async (req, res) => {
     }
 });
 
-app.post("/add-to-wishlist", async (req, res) => {
-    try {
-        const { product_id } = req.body;
-
-        if (!req.session.wishlist) {
-            req.session.wishlist = []; // Initialize wishlist if empty
-        }
-
-        // Check if product is already in wishlist
-        if (!req.session.wishlist.includes(product_id)) {
-            req.session.wishlist.push(product_id);
-        }
-
-        res.json({ success: true, message: "Added to wishlist!" });
-    } catch (err) {
-        console.error("Error adding to wishlist:", err);
-        res.status(500).json({ success: false, message: "Server error" });
-    }
-});
-
-app.get("/wishlist", async (req, res) => {
-    try {
-        if (!req.session.wishlist || req.session.wishlist.length === 0) {
-            return res.render("wishlist", { products: [] });
-        }
-
-        // Fetch products that are in the session wishlist
-        const wishlistProducts = await Product.find({ _id: { $in: req.session.wishlist } });
-
-        res.render("wishlist", { products: wishlistProducts });
-    } catch (err) {
-        console.error("Error fetching wishlist:", err);
-        res.status(500).send("Server error");
-    }
-});
-
-app.post("/remove-from-wishlist", async (req, res) => {
-    try {
-        const { product_id } = req.body;
-
-        if (!req.session.wishlist) {
-            return res.json({ success: false, message: "Wishlist is empty" });
-        }
-
-        // Remove product from session wishlist
-        req.session.wishlist = req.session.wishlist.filter(id => id !== product_id);
-
-        res.json({ success: true, message: "Removed from wishlist!" });
-    } catch (err) {
-        console.error("Error removing from wishlist:", err);
-        res.status(500).json({ success: false, message: "Server error" });
-    }
-});
-
-
 app.get('/shop-4-column', async (req, res) => {
     try {
         const category = req.query.category || ""; // Get category from query params
@@ -514,6 +459,72 @@ app.get('/blog-single', (req, res) => {
     res.render('blog-single', { blog });
 });
 
+app.get("/", async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.render("index", { products });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Server Error");
+    }
+});
+
+app.post("/wishlist/add", async (req, res) => {
+    try {
+        const { product_id } = req.body;
+
+        if (!product_id) {
+            return res.status(400).json({ success: false, message: "Product ID is required" });
+        }
+
+        // Ensure session wishlist exists
+        if (!req.session.wishlist) {
+            req.session.wishlist = [];
+        }
+
+        // Prevent duplicates in session
+        if (!req.session.wishlist.includes(product_id)) {
+            req.session.wishlist.push(product_id);
+
+            // Store in MongoDB
+            const existingItem = await Wishlist.findOne({ product_id });
+            if (!existingItem) {
+                await Wishlist.create({ product_id });
+            }
+        }
+
+        console.log("Wishlist updated:", req.session.wishlist);
+        res.json({ success: true, message: "Added to wishlist", wishlist: req.session.wishlist });
+
+    } catch (error) {
+        console.error("Error adding to wishlist:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
+app.post("/wishlist/remove", async (req, res) => {
+    try {
+        const { product_id } = req.body;
+
+        await Wishlist.findOneAndDelete({ product_id });
+
+        res.json({ success: true, message: "Removed from wishlist" });
+    } catch (error) {
+        console.error("Error removing from wishlist:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
+
+// Fetch Wishlist Items from Database
+app.get("/wishlist", async (req, res) => {
+    try {
+        const wishlistItems = await Wishlist.find().populate("product_id");
+        res.render("wishlist", { products: wishlistItems.map(item => item.product_id) });
+    } catch (error) {
+        console.error("Error fetching wishlist:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+});
 
 // Submit Product Form (Save to MongoDB)
 app.post('/add-product', upload.single('image'), async (req, res) => {
