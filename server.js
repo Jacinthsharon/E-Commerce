@@ -526,6 +526,11 @@ app.get("/wishlist", async (req, res) => {
     }
 });
 
+app.get('/book-now', (req, res) => {
+    const { product_id, product_name, rate } = req.query;
+    res.render('book-now', { product_id, product_name, rate });
+});
+
 // Submit Product Form (Save to MongoDB)
 app.post('/add-product', upload.single('image'), async (req, res) => {
     try {
@@ -672,6 +677,10 @@ app.get('/blog-grid', (req, res) => {
 
 app.get('/blog-single', (req, res) => {
     res.render('blog-single');
+});
+
+app.get('/book-now', (req, res) => {
+    res.render('book-now');
 });
 
 app.get('/cart', (req, res) => {

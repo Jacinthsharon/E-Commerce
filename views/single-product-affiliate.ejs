@@ -51,7 +51,7 @@
                                 <input class="cart-plus-minus-box" type="text" name="qtybutton" value="1" />
                             </div>
                             <div class="pro-details-cart">
-                                <button class="add-cart" href="#"> Add To Cart</button>
+                                <a href="/book-now?product_id=<%= product._id %>&product_name=<%= encodeURIComponent(product.product_name) %>&rate=<%= product.rate %>" class="add-cart" title="Book Now">Book Now</a>
                             </div>
                             <div class="pro-details-compare-wishlist pro-details-wishlist">
                                 <a href="#" class="action wishlist-btn" data-product-id="<%= product._id %>" title="Add to Wishlist">

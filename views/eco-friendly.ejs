@@ -45,7 +45,7 @@
                                                         <i class="pe-7s-like"></i>
                                                     </a>
                                                 </div>
-                                                <button title="Add To Cart" class="add-to-cart">Add To Cart</button>
+                                                <a href="/book-now?product_id=<%= product._id %>&product_name=<%= encodeURIComponent(product.product_name) %>&rate=<%= product.rate %>" class="add-to-cart" title="Book Now">Book Now</a>
                                             </div>
                                             <div class="content">
                                                 <span class="ratings">
