@@ -517,3 +517,33 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+document.getElementById('pageSearchInput').addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();
+    const resultsDiv = document.getElementById('searchResults');
+    resultsDiv.innerHTML = '';
+
+    if (searchTerm.length < 2) {
+        return;
+    }
+
+    // Get all visible text elements in the body
+    const textNodes = [...document.body.querySelectorAll('p, li, a, h1, h2, h3, h4, h5, h6, span, div')]
+        .filter(el => el.innerText && el.offsetParent !== null);
+
+    let resultCount = 0;
+
+    textNodes.forEach(node => {
+        if (node.innerText.toLowerCase().includes(searchTerm)) {
+            resultCount++;
+            const highlighted = node.innerText.replace(new RegExp(searchTerm, "gi"), match => `<mark>${match}</mark>`);
+            const resultItem = document.createElement('div');
+            resultItem.innerHTML = `<div style="margin-bottom: 10px;">${highlighted}</div>`;
+            resultsDiv.appendChild(resultItem);
+        }
+    });
+
+    if (resultCount === 0) {
+        resultsDiv.innerHTML = '<p>No matches found.</p>';
+    }
+});

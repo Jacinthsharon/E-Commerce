@@ -116,10 +116,6 @@
                         <a href="/wishlist" class="header-action-btn ">
                             <i class="pe-7s-like"></i>
                         </a>
-                        <a href="#offcanvas-cart" class="header-action-btn header-action-btn-cart offcanvas-toggle pr-0">
-                            <i class="pe-7s-shopbag"></i>
-                            <span class="header-action-num">01</span>
-                        </a>
                         <a href="#offcanvas-mobile-menu" class="header-action-btn header-action-btn-menu offcanvas-toggle d-lg-none">
                             <i class="pe-7s-menu"></i>
                         </a>
@@ -130,6 +126,23 @@
 </header>
 
 <div class="offcanvas-overlay"></div>
+
+<!-- Search Modal -->
+<div class="modal fade" id="searchActive" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 600px;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Search Products</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="pageSearchInput" class="form-control" placeholder="Type to search..." />
+          <div id="searchResults" style="margin-top: 15px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
 <!-- OffCanvas Cart End -->
 
