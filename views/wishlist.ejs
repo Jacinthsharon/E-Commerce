@@ -58,10 +58,12 @@
                                                     </div>
                                                 </td>
                                                 <td class="product-wishlist-cart">
-                                                    <a href="/add-to-cart/<%= product._id %>" class="product-wishlist-cart">Add to Cart</a>
+                                                    <a href="/book-now?product_id=<%= product._id %>&product_name=<%= encodeURIComponent(product.product_name) %>&rate=<%= product.rate %>" class="product-wishlist-cart">
+                                                        Book Now
+                                                    </a>
                                                 </td>
                                                 <td class="product-wishlist-remove">
-                                                    <button class="remove-wishlist-item" data-id="<%= product._id %>">Remove</button>
+                                                    <button class="remove-wishlist-item" data-id="<%= product._id %>">Book Now</button>
                                                 </td>
                                             </tr>
                                         <% }); %>

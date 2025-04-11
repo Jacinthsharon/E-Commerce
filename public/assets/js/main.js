@@ -547,3 +547,4 @@ document.getElementById('pageSearchInput').addEventListener('input', function ()
         resultsDiv.innerHTML = '<p>No matches found.</p>';
     }
 });
+
