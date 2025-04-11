@@ -531,6 +531,7 @@ app.get('/book-now', (req, res) => {
     res.render('book-now', { product_id, product_name, rate });
 });
 
+
 // Submit Product Form (Save to MongoDB)
 app.post('/add-product', upload.single('image'), async (req, res) => {
     try {

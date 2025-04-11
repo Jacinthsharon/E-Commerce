@@ -34,14 +34,11 @@
                     <!-- Shop Top Area Start -->
                     <div class="shop-top-bar d-flex">
                         <!-- Left Side start -->
-                        <p><span>12</span> Product Found of <span>30</span></p>
+                        <p>Product Found of <span><%= products.length %></span></p>
                         <!-- Left Side End -->
                         <div class="shop-tab nav">
                             <a class="active" href="#shop-grid" data-bs-toggle="tab">
                                 <i class="fa fa-th" aria-hidden="true"></i>
-                            </a>
-                            <a href="#shop-list" data-bs-toggle="tab">
-                                <i class="fa fa-list" aria-hidden="true"></i>
                             </a>
                         </div>
                         <!-- Right Side Start -->
@@ -96,7 +93,7 @@
                                                 </span>
                                                 <h5 class="title"><a href="/product/<%= product._id %>"><%= product.product_name %></a></h5>
                                                 <p class="short-description"><%= product.short_description %></p>
-                                                <span class="price"><span class="new">$<%= product.rate %></span></span>
+                                                <span class="price"><span class="new">₹ <%= product.rate %></span></span>
                                             </div>
                                         </div>
                                     </div>
@@ -230,7 +227,7 @@
                                 <h2>Ardene Microfiber Tights</h2>
                                 <div class="pricing-meta">
                                     <ul>
-                                        <li class="old-price not-cut">$18.90</li>
+                                        <li class="old-price not-cut">₹ 18.90</li>
                                     </ul>
                                 </div>
                                 <div class="pro-details-rating-wrap">
